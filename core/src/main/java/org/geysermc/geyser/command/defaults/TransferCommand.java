@@ -23,34 +23,30 @@
  * @link https://github.com/GeyserMC/Geyser
  */
 
- package org.geysermc.geyser.command.defaults;
+package org.geysermc.geyser.command.defaults;
 
- import java.util.List;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.geysermc.geyser.GeyserImpl;
- import org.geysermc.geyser.command.GeyserCommand;
- import org.geysermc.geyser.command.GeyserCommandSource;
- import org.geysermc.geyser.session.GeyserSession;
- //import org.geysermc.geyser.text.GeyserLocale;
+import org.geysermc.geyser.command.GeyserCommand;
+import org.geysermc.geyser.command.GeyserCommandSource;
+import org.geysermc.geyser.session.GeyserSession;
 import org.geysermc.geyser.session.SessionManager;
- 
- //import java.util.stream.Collectors;
- 
- public class TransferCommand extends GeyserCommand {
- 
-     private final GeyserImpl geyser;
- 
-     public TransferCommand(GeyserImpl geyser, String name, String description, String permission) {
-         super(name, description, permission);
- 
-         this.geyser = geyser;
-     }
- 
-     @Override
-     public void execute(@Nullable GeyserSession session, GeyserCommandSource sender, String[] args) {
+
+public class TransferCommand extends GeyserCommand {
+    private final GeyserImpl geyser;
+
+    public TransferCommand(GeyserImpl geyser, String name, String description, String permission) {
+        super(name, description, permission);
+
+        this.geyser = geyser;
+    }
+
+    @Override
+    public void execute(@Nullable GeyserSession session, GeyserCommandSource sender, String[] args) {
         if (args.length != 3) {
             sender.sendMessage("bad args: expected playerId{bedrockUsername or xuid} addr port");
             return;
@@ -60,7 +56,7 @@ import org.geysermc.geyser.session.SessionManager;
         String addr = args[1];
         int    port = Integer.parseInt(args[2]);
 
-        if(playerId == null) {
+        if (playerId == null) {
             sender.sendMessage("missing playerid");
             return;
         }
@@ -79,13 +75,13 @@ import org.geysermc.geyser.session.SessionManager;
         }
 
         sender.sendMessage(String.format("player %s transferred to %s:%d", playerSession.bedrockUsername(), addr, port));
-     }
- 
-     private GeyserSession findSession(GeyserCommandSource sender, @Nonnull String playerId) {
+    }
+
+    private GeyserSession findSession(GeyserCommandSource sender, @Nonnull String playerId) {
         SessionManager manager = geyser.getSessionManager();
 
         GeyserSession session = manager.sessionByXuid(playerId);
-        if(session != null) {
+        if (session != null) {
             return session;
         }
 
@@ -114,10 +110,10 @@ import org.geysermc.geyser.session.SessionManager;
         sender.sendMessage("no match");
 
         return null;
-     }
-     @Override
-     public boolean isSuggestedOpOnly() {
-         return true;
-     }
- }
- 
+    }
+
+    @Override
+    public boolean isSuggestedOpOnly() {
+        return true;
+    }
+}

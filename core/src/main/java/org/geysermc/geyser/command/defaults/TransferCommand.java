@@ -27,6 +27,9 @@
 
  import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.geysermc.geyser.GeyserImpl;
  import org.geysermc.geyser.command.GeyserCommand;
  import org.geysermc.geyser.command.GeyserCommandSource;
@@ -47,7 +50,7 @@ import org.geysermc.geyser.session.SessionManager;
      }
  
      @Override
-     public void execute(GeyserSession session, GeyserCommandSource sender, String[] args) {
+     public void execute(@Nullable GeyserSession session, GeyserCommandSource sender, String[] args) {
         if (args.length != 3) {
             sender.sendMessage("bad args: expected xuid addr port");
             return;
@@ -56,6 +59,11 @@ import org.geysermc.geyser.session.SessionManager;
         String playerId = args[0];
         String addr = args[1];
         int    port = Integer.parseInt(args[2]);
+
+        if(playerId == null) {
+            sender.sendMessage("missing playerid");
+            return;
+        }
 
         GeyserSession playerSession = findSession(playerId);
         if (playerSession == null) {
@@ -73,7 +81,7 @@ import org.geysermc.geyser.session.SessionManager;
         sender.sendMessage(String.format("player %s transferred to %s:%d", playerSession.bedrockUsername(), addr, port));
      }
  
-     private GeyserSession findSession(String playerId) {
+     private GeyserSession findSession(@Nonnull String playerId) {
         SessionManager manager = geyser.getSessionManager();
 
         GeyserSession session = manager.sessionByXuid(playerId);

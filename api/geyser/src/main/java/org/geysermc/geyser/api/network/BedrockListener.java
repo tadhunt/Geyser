@@ -51,6 +51,14 @@ public interface BedrockListener {
     int port();
 
     /**
+     * The port to respond to to Ping for Bedrock from
+     * connections from.
+     *
+     * @return the port (if set) otherwise the listening port
+     */
+    int pingPort();
+
+    /**
      * Gets the primary MOTD shown to Bedrock players if a ping passthrough setting is not enabled.
      * <p>
      * This is the first line that will be displayed.

@@ -25,6 +25,7 @@
 
 package org.geysermc.geyser.network;
 
+import com.nimbusds.jose.crypto.X25519Decrypter;
 import com.nukkitx.protocol.bedrock.BedrockPong;
 import com.nukkitx.protocol.bedrock.BedrockServerEventHandler;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
@@ -111,7 +112,7 @@ public class ConnectorServerEventHandler implements BedrockServerEventHandler {
         pong.setNintendoLimited(false);
         pong.setProtocolVersion(GameProtocol.DEFAULT_BEDROCK_CODEC.getProtocolVersion());
         pong.setVersion(GameProtocol.DEFAULT_BEDROCK_CODEC.getMinecraftVersion()); // Required to not be empty as of 1.16.210.59. Can only contain . and numbers.
-        pong.setIpv4Port(config.getBedrock().port());
+        pong.setIpv4Port(config.getBedrock().pingPort());
 
         if (config.isPassthroughMotd() && pingInfo != null && pingInfo.getDescription() != null) {
             String[] motd = MessageTranslator.convertMessageLenient(pingInfo.getDescription()).split("\n");

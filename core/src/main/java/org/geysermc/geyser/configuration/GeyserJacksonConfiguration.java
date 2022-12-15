@@ -182,6 +182,18 @@ public abstract class GeyserJacksonConfiguration implements GeyserConfiguration 
             return port;
         }
 
+        @Setter
+        @JsonProperty("ping-port")
+        private int pingPort = 0;
+
+        @Override
+        public int pingPort() {
+            if(pingPort == 0) {
+                    return port();
+            }
+            return pingPort;
+        }
+
         @Getter
         @JsonProperty("clone-remote-port")
         private boolean cloneRemotePort = false;

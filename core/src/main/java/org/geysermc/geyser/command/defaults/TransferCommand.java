@@ -52,7 +52,7 @@ import org.geysermc.geyser.session.SessionManager;
      @Override
      public void execute(@Nullable GeyserSession session, GeyserCommandSource sender, String[] args) {
         if (args.length != 3) {
-            sender.sendMessage("bad args: expected xuid addr port");
+            sender.sendMessage("bad args: expected playerId{bedrockUsername or xuid} addr port");
             return;
         }
 
@@ -65,7 +65,7 @@ import org.geysermc.geyser.session.SessionManager;
             return;
         }
 
-        GeyserSession playerSession = findSession(playerId);
+        GeyserSession playerSession = findSession(sender, playerId);
         if (playerSession == null) {
             sender.sendMessage(String.format("player %s: session not found", playerId));
             return;
@@ -81,7 +81,7 @@ import org.geysermc.geyser.session.SessionManager;
         sender.sendMessage(String.format("player %s transferred to %s:%d", playerSession.bedrockUsername(), addr, port));
      }
  
-     private GeyserSession findSession(@Nonnull String playerId) {
+     private GeyserSession findSession(GeyserCommandSource sender, @Nonnull String playerId) {
         SessionManager manager = geyser.getSessionManager();
 
         GeyserSession session = manager.sessionByXuid(playerId);
@@ -95,14 +95,23 @@ import org.geysermc.geyser.session.SessionManager;
             if (s == null) {
                 continue;
             }
-            if (playerId == s.bedrockUsername()) {
+
+            sender.sendMessage(String.format("checking bedrockUsername %s against playerId %s", s.bedrockUsername(), playerId));
+
+            if (playerId.equals(s.bedrockUsername())) {
+                sender.sendMessage("name matched");
                 return s;
             }
 
-            if (playerId == s.xuid()) {
-                    return s;
+            sender.sendMessage(String.format("checking xuid %s against playerId %s", s.xuid(), playerId));
+
+            if (playerId.equals(s.xuid())) {
+                sender.sendMessage("xuid matched");
+                return s;
             }
         }
+
+        sender.sendMessage("no match");
 
         return null;
      }
